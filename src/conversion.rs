@@ -40,13 +40,13 @@ macro_rules! implement_from {
 }
 
 macro_rules! implement_from_signed {
-    {[$($name:ident),*], [$($from:ident),*], $type:ty } => {$(implement_from_signed!($name, $from, $type);)*};
-    {$name:ident, [$($from:ident),*], $type:ty } => {$(implement_from_signed!($name, $from, $type);)*};
-    {[$($name:ident),*], $from:ident, $type:ty } => {$(implement_from_signed!($name, $from, $type);)*};
-    {$name:ident, $from:ty, $type:ty} => {
+    {[$($name:ident),*], [$($from:ident),*], $type_f:ty, $type_t:ty } => {$(implement_from_signed!($name, $from, $type_f, $type_t);)*};
+    {$name:ident, [$($from:ident),*], $type_f:ty, $type_t:ty } => {$(implement_from_signed!($name, $from, $type_f, $type_t);)*};
+    {[$($name:ident),*], $from:ident, $type_f:ty, $type_t:ty } => {$(implement_from_signed!($name, $from, $type_f, $type_t);)*};
+    {$name:ident, $from:ty, $type_f:ty, $type_t:ty} => {
         impl From<$from> for $name {
             fn from(x: $from) -> $name {
-                $name(x.0 as $type)
+                $name(<$from as Into<$type_f>>::into(x) as $type_t)
             }
         }
     };
@@ -1796,7 +1796,7 @@ implement_from_signed!(
     ], [
         u2, u3, u4, u5, u6, u7
     ],
-    i8
+    u8, i8
 );
 
 implement_from_signed!(
@@ -1805,7 +1805,7 @@ implement_from_signed!(
     ], [
         u9, u10, u11, u12, u13, u14, u15
     ],
-    i16
+    u16, i16
 );
 
 implement_from_signed!(
@@ -1814,7 +1814,7 @@ implement_from_signed!(
     ], [
         u17, u18, u19, u20, u21, u22, u23, u24, u25, u26, u27, u28, u29, u30, u31
     ],
-    i32
+    u32, i32
 );
 
 implement_from_signed!(
@@ -1826,7 +1826,7 @@ implement_from_signed!(
         u33, u34, u35, u36, u37, u38, u39, u40, u41, u42, u43, u44, u45, u46, u47, u48, u49, u50,
         u51, u52, u53, u54, u55, u56, u57, u58, u59, u60, u61, u62, u63
     ],
-    i64
+    u64, i64
 );
 
 implement_from_signed!(
@@ -1835,7 +1835,7 @@ implement_from_signed!(
     ], [
         i2, i3, i4, i5, i6, i7
     ],
-    u8
+    i8, u8
 );
 
 implement_from_signed!(
@@ -1844,7 +1844,7 @@ implement_from_signed!(
     ], [
         i9, i10, i11, i12, i13, i14, i15
     ],
-    u16
+    i16, u16
 );
 
 implement_from_signed!(
@@ -1853,7 +1853,7 @@ implement_from_signed!(
     ], [
         i17, i18, i19, i20, i21, i22, i23, i24, i25, i26, i27, i28, i29, i30, i31
     ],
-    u32
+    i32, u32
 );
 
 implement_from_signed!(
@@ -1865,7 +1865,7 @@ implement_from_signed!(
         i33, i34, i35, i36, i37, i38, i39, i40, i41, i42, i43, i44, i45, i46, i47, i48, i49, i50,
         i51, i52, i53, i54, i55, i56, i57, i58, i59, i60, i61, i62, i63
     ],
-    u64
+    i64, u64
 );
 
 impl From<bool> for u1 {
