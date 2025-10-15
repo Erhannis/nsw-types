@@ -46,7 +46,7 @@ macro_rules! implement_from_signed {
     {$name:ident, $from:ty, $type:ty} => {
         impl From<$from> for $name {
             fn from(x: $from) -> $name {
-                $name(((x.0 << <$from>::TOTAL_BITS) as $type) >> $name::TOTAL_BITS)
+                $name(((x.0 << (<$from>::TOTAL_BITS - <$from>::BITS)) as $type) >> ($name::TOTAL_BITS - $name::BITS))
             }
         }
     };

@@ -53,7 +53,7 @@ macro_rules! define_unsigned {
             pub const MAX: Self = $name(((1 as $type) << $bits) -1 );
             pub const MIN: Self = $name(0);
             pub const BITS: u32 = $bits;
-            const TOTAL_BITS: usize = (lib::core::mem::size_of::<$type>()*8) - $bits;
+            const TOTAL_BITS: u32 = (lib::core::mem::size_of::<$type>()*8) as u32;
 
             fn mask(self) -> Self {
                 $name(self.0 & ( ((1 as $type) << $bits).overflowing_sub(1).0))
@@ -79,7 +79,7 @@ macro_rules! define_signed {
             pub const MAX: Self = $name(((1 as $type) << ($bits - 1)) - 1);
             pub const MIN: Self = $name(-((1 as $type) << ($bits - 1)));
             pub const BITS: u32 = $bits;
-            const TOTAL_BITS: usize = (lib::core::mem::size_of::<$type>()*8) - $bits;
+            const TOTAL_BITS: u32 = (lib::core::mem::size_of::<$type>()*8) as u32;
 
             fn mask(self) -> Self {
                 if ( self.0 & (1<<($bits-1)) ) == 0 {
