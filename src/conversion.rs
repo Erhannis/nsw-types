@@ -39,6 +39,7 @@ macro_rules! implement_from {
     };
 }
 
+// Should this be something other than `from`?  You can't `from` a u32 to an i32, only `as`.
 macro_rules! implement_from_signed {
     {[$($name:ident),*], [$($from:ident),*], $type:ty } => {$(implement_from_signed!($name, $from, $type);)*};
     {$name:ident, [$($from:ident),*], $type:ty } => {$(implement_from_signed!($name, $from, $type);)*};
@@ -1913,6 +1914,13 @@ mod tests {
 
         assert_eq!(i7::from(i6(65)), i7(65));
         assert_eq!(i7::from(i6(-65)), i7(-65));
+
+        assert_eq!(u7::from(i7(-1)), u7(0x7F));
+        assert_eq!(i7::from(u7(0x7F)), i7(-1));
+        assert_eq!(u22::from(i22(-1)), u22(0x3FFFFF));
+        assert_eq!(i22::from(u22(0x3FFFFF)), i22(-1));
+        assert_eq!(u43::from(i43(-522412345225)), u43(0x7865DCC3877));
+        assert_eq!(i43::from(u43(0x7865DCC3877)), i43(-522412345225));
     }
 
     #[test]
